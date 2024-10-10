@@ -25,17 +25,15 @@ export const fetchClients = createAsyncThunk(
 
 export const addClient = createAsyncThunk(
     "add/client",
-    async data => {
+    async (data, { rejectWithValue }) => {
         try {
             const response = await client.post("/clients/create", data);
             return response.data;
         } catch (error) {
-            if (error.response) {
-                return error.response.data;
-            } else if (error.request) {
-                return error.request;
+            if (error.response && error.response.status === 400) {
+                return rejectWithValue(error.response.data);
             } else {
-                return error.message;
+                return rejectWithValue("une erreur s'est produite");
             }
         }
     }
@@ -43,17 +41,15 @@ export const addClient = createAsyncThunk(
 
 export const deleteClient = createAsyncThunk(
     "delete/client",
-    async id => {
+    async (id, { rejectWithValue }) => {
         try {
             const response = await client.delete(`/clients/delete/${id}`);
             return response.data;
         } catch (error) {
-            if (error.response) {
-                return error.response.data;
-            } else if (error.request) {
-                return error.request;
+            if (error.response && error.response.status === 400) {
+                return rejectWithValue(error.response.data);
             } else {
-                return error.message;
+                return rejectWithValue("une erreur s'est produite");
             }
         }
     }
@@ -61,17 +57,15 @@ export const deleteClient = createAsyncThunk(
 
 export const updateClient = createAsyncThunk(
     "update/client",
-    async data => {
+    async (data, { rejectWithValue }) => {
         try {
             const response = await client.put(`/clients/update/${data.id}`, data);
             return response.data;
         } catch (error) {
-            if (error.response) {
-                return error.response.data;
-            } else if (error.request) {
-                return error.request;
+            if (error.response && error.response.status === 400) {
+                return rejectWithValue(error.response.data);
             } else {
-                return error.message;
+                return rejectWithValue("une erreur s'est produite");
             }
         }
     }
@@ -82,6 +76,7 @@ const initialState = {
     clients: [],
     status: 'idle',
     error: null,
+    validationError: null
 };
 
 const clientSlice = createSlice({
@@ -92,6 +87,8 @@ const clientSlice = createSlice({
         builder
         .addCase(fetchClients.pending, (state) => {
             state.status = 'loading';
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(fetchClients.fulfilled, (state, action) => {
             state.status = 'succeeded';
@@ -104,33 +101,45 @@ const clientSlice = createSlice({
         // add client
         .addCase(addClient.pending, (state) => {
             state.status = 'loading';
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(addClient.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.status = 'success';
             state.clients.push(action.payload);
         })
         .addCase(addClient.rejected, (state, action) => {
             state.status = 'failed';
-            state.error = action.error.message;
+            if(Array.isArray(action.payload)){
+                state.validationError = action.payload;
+            }
+            state.error = action.payload;
         })
         // delete client
         .addCase(deleteClient.pending, (state) => {
             state.status = 'loading';
+            state.error = null,
+            state.validationError = null;
         })
         .addCase(deleteClient.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.status = 'success';
             state.clients = state.clients.filter(client => client._id !== action.payload);
         })
         .addCase(deleteClient.rejected, (state, action) => {
             state.status = 'failed';
-            state.error = action.error.message;
+            if(Array.isArray(action.payload)){
+                state.validationError = action.payload;
+            }
+            state.error = action.payload;
         })
         // update client
         .addCase(updateClient.pending, (state) => {
             state.status = 'loading';
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(updateClient.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.status = 'success';
             state.clients = state.clients.map(client => {
                 if(client._id === action.payload._id){
                     return action.payload;
@@ -140,7 +149,10 @@ const clientSlice = createSlice({
         })
         .addCase(updateClient.rejected, (state, action) => {
             state.status = 'failed';
-            state.error = action.error.message;
+            if(Array.isArray(action.payload)){
+                state.validationError = action.payload;
+            }
+            state.error = action.payload;
         })
     }
 });
@@ -148,6 +160,7 @@ const clientSlice = createSlice({
 export const getClients = (state) => state.client.clients;
 export const getClientStatus = (state) => state.client.status;
 export const getClientError = (state) => state.client.error;
+export const getClientValidationError = (state) => state.client.validationError;
 
 export const {} = clientSlice.actions;
 

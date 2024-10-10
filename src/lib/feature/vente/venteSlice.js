@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
 import axios from "axios";
 import { config } from "@/lib/feature/config";
 
@@ -25,35 +25,33 @@ export const fetchVentes = createAsyncThunk(
 
 export const addVente = createAsyncThunk(
     "vente/addVente",
-    async data => {
+    async (data, { rejectWithValue } ) => {
         try {
             const response = await vente.post("/ventes/vente", data);
             return response.data;
         } catch (error) {
-            if (error.response) {
-                return error.response.data;
-            } else if (error.request) {
-                return error.request;
-            } else {
-                return error.message;
-            }
+            if (error.response && error.response.status === 400) {
+                return rejectWithValue(error.response.data);
+            } 
+            else {
+                return rejectWithValue("une erreur s'est produite");
+            }   
         }
     }
 );
 
 export const deleteVente = createAsyncThunk(
     "vente/deleteVente",
-    async id => {
+    async(id, { rejectWithValue }) => {
         try {
             const response = await vente.delete(`/ventes/remove/${id}`);
             return response.data;
         } catch (error) {
-            if (error.response) {
-                return error.response.data;
-            } else if (error.request) {
-                return error.request;
-            } else {
-                return error.message;
+            if (error.response && error.response.status === 400) {
+                return rejectWithValue(error.response.data);
+            } 
+            else {
+                return rejectWithValue("une erreur s'est produite");
             }
         }
     }
@@ -61,17 +59,16 @@ export const deleteVente = createAsyncThunk(
 
 export const updateVente = createAsyncThunk(
     "vente/updateVente",
-    async data => {
+    async (data, { rejectWithValue }) => {
         try {
             const response = await vente.put(`/ventes/update/${data.id}`, data);
             return response.data;
         } catch (error) {
-            if (error.response) {
-                return error.response.data;
-            } else if (error.request) {
-                return error.request;
-            } else {
-                return error.message;
+            if (error.response && error.response.status === 400) {
+                return rejectWithValue(error.response.data);
+            } 
+            else {
+                return rejectWithValue("une erreur s'est produite");
             }
         }
     }
@@ -82,6 +79,7 @@ const initialState = {
     ventes: [],
     status: "idle",
     error: null,
+    validationError: null
     };
 
 const venteSlice = createSlice({
@@ -93,45 +91,66 @@ const venteSlice = createSlice({
         // fetchVentes
         .addCase(fetchVentes.pending, (state) => {
             state.status = "loading";
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(fetchVentes.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "success";
             state.ventes = action.payload;
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(fetchVentes.rejected, (state, action) => {
             state.status = "failed";
-            state.error = action.error.message;
+            state.error = action.payload;
+            state.validationError = null;
         })
         // addVente
         .addCase(addVente.pending, (state) => {
             state.status = "loading";
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(addVente.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "success";
             state.ventes.push(action.payload);
         })
         .addCase(addVente.rejected, (state, action) => {
             state.status = "failed";
-            state.error = action.error.message;
+            if(Array.isArray(action.payload)){
+                state.validationError = action.payload;
+            }
+            else{
+                state.error = action.payload;
+            }
         })
         // deleteVente
         .addCase(deleteVente.pending, (state) => {
             state.status = "loading";
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(deleteVente.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "success";
             state.ventes = state.ventes.filter((vente) => vente._id !== action.payload._id);
         })
         .addCase(deleteVente.rejected, (state, action) => {
             state.status = "failed";
-            state.error = action.error.message;
+            if(Array.isArray(action.payload)){
+                state.validationError = action.payload;
+            }
+            else{
+                state.error = action.payload;
+            }
         })
         // updateVente
         .addCase(updateVente.pending, (state) => {
             state.status = "loading";
+            state.error = null;
+            state.validationError = null;
         })
         .addCase(updateVente.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "success";
             state.ventes = state.ventes.map((vente) => {
                 if (vente._id === action.payload._id) {
                     return action.payload;
@@ -141,7 +160,12 @@ const venteSlice = createSlice({
         })
         .addCase(updateVente.rejected, (state, action) => {
             state.status = "failed";
-            state.error = action.error.message;
+            if(Array.isArray(action.payload)){
+                state.validationError = action.payload;
+            }
+            else{
+                state.error = action.payload;
+            }
         });
     }
 }
@@ -150,6 +174,7 @@ const venteSlice = createSlice({
 export const getVentes = (state) => state.vente.ventes;
 export const getStatus = (state) => state.vente.status;
 export const getError = (state) => state.vente.error;
+export const getValidationError = (state) => state.vente.validationError;
 
 export const {} = venteSlice.actions;
 

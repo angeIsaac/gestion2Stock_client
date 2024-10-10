@@ -25,8 +25,10 @@ const Products = () => {
   }, [status, dispatch]);
 
   return (
-    <div>
-      produits
+    <div className='pt-5 mt-2'>
+      <div>
+        <h1 className='text-center text-2xl font-bold text-gray-500'>Liste des produits</h1>
+      </div>
       {/* <Table columns={columns} data={produits} /> */}
     </div>
   )
