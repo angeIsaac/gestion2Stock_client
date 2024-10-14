@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const Table = ({ columns, renderRow, data }) => {
     return (
         <motion.table 
-        className="w-full mt-4"
+        className="w-full mt-4 table-auto min-w-[690px]"
         initial={{opacity: 0}}
         animate={{opacity:1}}
         transition={{duration: 0.3}}>

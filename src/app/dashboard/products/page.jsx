@@ -32,7 +32,7 @@ const Products = () => {
   }, [status, dispatch]);
 
   return (
-    <div className='pt-5 mt-2 flex flex-col justify-start px-6 py-3 w-full'>
+    <div className='mt-2 flex flex-col justify-start px-6 py-3 w-full ring-1 ring-slate-900/5 rounded-lg p-4 shadow-sm bg-white'>
       <div className='flex flex-col md:flex-row md:justify-between items-center w-full'>
         <h1 className='text-center text-2xl font-bold text-gray-500'>Liste des produits</h1>
         <div className='flex justify-center items-center'>
@@ -55,7 +55,9 @@ const Products = () => {
           </div>
         </div>
       </div>
-      <Table columns={columns} data={data} renderRow={renderRow} />
+      <div className='overflow-x-auto'>
+        <Table columns={columns} data={data} renderRow={renderRow} />
+      </div>
     </div >
   )
 }
