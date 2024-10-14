@@ -15,7 +15,7 @@ const Barchart = ({ data }) => {
         <div className='w-full'>
             <ResponsiveContainer width="100%" height={300}>
                 <BarChart
-                    width={500}
+                    width={300}
                     height={300}
                     data={data}
                     margin={{
@@ -30,8 +30,8 @@ const Barchart = ({ data }) => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="pv" fill="#8884d8" />
-                    <Bar dataKey="uv" fill="#82ca9d" />
+                    <Bar dataKey="montant" fill="#8884d8" />
+                    {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
                 </BarChart>
             </ResponsiveContainer>
         </div>

@@ -1,19 +1,29 @@
-
+import { motion } from "framer-motion";
 
 const Table = ({ columns, renderRow, data }) => {
     return (
-        <table className="w-full mt-4">
+        <motion.table 
+        className="w-full mt-4"
+        initial={{opacity: 0}}
+        animate={{opacity:1}}
+        transition={{duration: 0.3}}>
             <thead>
                 <tr className="text-left text-gray-500 text-sm">
-                    {columns.map((col) => (
-                        <th key={col.accessor} className={col.className}>
+                    {columns.map((col, index) => (
+                        <motion.th 
+                        initial={{opacity:0}}
+                        animate={{opacity:1}}
+                        transition={{duration:0.3, delay: index * 0.1}}
+                            key={index} className={`${col.className}`}>
                             {col.header}
-                        </th>
+                        </motion.th>
                     ))}
                 </tr>
             </thead>
-            <tbody>{data.map((item) => renderRow(item))}</tbody>
-        </table>
+            <tbody className="">
+                {data.map((item, index) => renderRow(item, index))}
+            </tbody>
+        </motion.table>
     );
 };
 

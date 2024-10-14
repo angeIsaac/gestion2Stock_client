@@ -10,8 +10,8 @@ const SalesPieChart = ({ data }) => {
                 <PieChart>
                     <Pie
                         data={data}
-                        dataKey="sales"
-                        nameKey="productName"
+                        dataKey="montant"
+                        nameKey="name"
                         cx="50%"
                         cy="50%"
                         outerRadius="80%"
