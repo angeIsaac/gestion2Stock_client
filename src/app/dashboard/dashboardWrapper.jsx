@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Navbar from "@/app/(components)/Navbar/Navbar";
-import Sidebar from "@/app/(components)/Sidebar/sidebar";
+import Sidebar from "@/app/(components)/sidebar/sidebar";
 import { useSelector } from "react-redux";
 import { StoreProvider } from "@/app/storeProvider";
 
