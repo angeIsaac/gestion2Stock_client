@@ -4,6 +4,8 @@ import Table from '@/app/ui/Table'
 import { vente, data } from "@/app/ui/data";
 import VentRenderRow from "@/app/ui/VentRenderRow";
 import { Search } from 'lucide-react';
+import Input from '@/app/ui/input';
+import SearchModal from "@/app/ui/searchModal";
 
 const Vente = () => {
   return (
@@ -12,15 +14,32 @@ const Vente = () => {
       <div>
         <div className='flex justify-end space-x-5 mb-4'>
           <div className='flex items-center relative'>
-            <input type="text" placeholder='rechercher...' onChange={() => {}} name='search' id='search' className='bg-white px-2 py-2 rounded-lg input h-10 w-38 border border-gray-100' />
-            <span className='absolute right-1'>
-              <Search className='text-gray-500' size={20} />
-            </span>
+            <SearchModal />
           </div>
           <div className=''>
-            <button className='px-3 py-2 rounded-lg ring-1 ring-slate-900/5 bg-slate-900 text-white hover:bg-slate-800 transition-transform transform active:scale-90 duration-300 '>
+            <button onClick={() => { document.getElementById("my_modal").showModal()}} className='px-3 py-2 rounded-lg ring-1 ring-slate-900/5 bg-indigo-900 text-white hover:bg-indigo-800 transition-transform transform active:scale-90 duration-300 '>
               Ajouter une vente
             </button>
+            <dialog id='my_modal' className='modal'>
+              <div className='modal-box bg-white p-10'>
+                <div>
+                  <Input type="number" placeholder='quantité' label={"Quantité"} className='px-3 py-3 border outline-none rounded-lg bg-gray-100 focus:border-blue-100 border-gray-100 focus:border-2' />
+                  <Input type="text" placeholder='produit' label={"produit"} className='px-3 py-3 border outline-none rounded-lg bg-gray-100 focus:border-blue-100 border-gray-100 focus:border-2' />
+                  <Input type="number" placeholder='montant' label={"montant"} className='px-3 py-3 border outline-none rounded-lg bg-gray-100 focus:border-2 focus:border-blue-100 border-gray-100' />
+                  <Input type="text" placeholder='client' label={"client"} className='px-3 py-3 border outline-none rounded-lg bg-gray-100 focus:border-2 focus:border-blue-100 border-gray-100' />
+                </div>
+                <div className='modal-action'>
+                  <button className='btn btn-primary text-white'>
+                    Ajouter
+                  </button>
+                  <form action="" method='dialog'>
+                    <button className='btn btn-outline hover:btn-ghost'>
+                      Annuler
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </dialog>
           </div>
         </div>
       </div>
