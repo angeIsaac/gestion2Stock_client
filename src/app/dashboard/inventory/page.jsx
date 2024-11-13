@@ -15,7 +15,9 @@ const Inventaitre = () => {
       </div>
       <div className='w-full overflow-auto p-4 mt-4'>
         <table className='w-full border border-slate-600 border-collapse'>
-          <caption className='text-lg font-bold caption-top p-3 uppercase'>Inventaire du mois de novembre</caption>
+          <caption className='text-lg font-bold caption-top p-3 uppercase mb-3'>
+            Inventaire du mois de novembre
+          </caption>
           <thead>
             <tr>
               {
