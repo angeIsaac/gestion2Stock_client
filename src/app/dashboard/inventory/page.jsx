@@ -2,9 +2,9 @@ import React from 'react'
 import { data } from "@/app/ui/data"
 
 const Inventaitre = () => {
-  const column = ["Refference", "Nom", "Poids", "Quantité"]
+  const column = ["Refference", "image", "Nom", "Poids", "Quantité"]
   return (
-    <div className='flex flex-col px-4 py-3'>
+    <div className='flex flex-col px-4 bg-white ring-1 ring-slate-900/5 rounded-lg py-4  shadow-sm w-full'>
       <div className='flex flex-col md:flex-row md:justify-between justify-center md:items-center'>
         <div>
           <h1 className='text-lg md:text-3xl font-bold'><span className='text-orange-400 text-4xl font-extrabold'>In</span>ventaire</h1>
@@ -30,6 +30,7 @@ const Inventaitre = () => {
                 data.map((item) => (
                   <tr key={item} className='border border-slate-600 hover:bg-blue-100'>
                     <td className='border p-4 border-slate-600'>refference</td>
+                    <td className='border p-4 border-slate-600'>image</td>
                     <td className='border p-4 border-slate-600'>nom</td>
                     <td className='border p-4 border-slate-600'>poids</td>
                     <td className='border p-4 border-slate-600'>Quantité</td>

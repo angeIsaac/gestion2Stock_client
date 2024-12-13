@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { data } from "@/app/ui/data"
+import { motion } from "framer-motion"
 
 const page = () => {
     const [nomFournisseur, setNonFourisseur] = useState('');
@@ -10,7 +11,7 @@ const page = () => {
     const [email, setEmail] = useState('');
     const [ville, setVille] = useState('');
   return (
-    <section>
+    <section className="bg-white ring-1 ring-slate-900/5 rounded-lg py-4 px-5 shadow-sm w-full">
       <h1 className="text-2xl font-semibold text-left mb-2 p-2">
         Liste des fournisseurs
       </h1>
@@ -97,42 +98,47 @@ const page = () => {
         </dialog>
       </div>
       <div>
-        <table className="w-full overflow-x-auto mt-3">
+        <motion.table
+        className="w-full overflow-x-auto mt-3">
           <thead className="mb-4 px-2">
-            <tr className="p-2">
+            <motion.tr
+            className="p-2">
               <th className="text-left text-gray-600 text-base">Nom</th>
               <th className="text-left text-gray-600 text-base">Adresse</th>
               <th className="text-left text-gray-600 text-base">Telephone</th>
               <th className="text-left text-gray-600 text-base">Email</th>
               <th className="text-left text-gray-600 text-base">Ville</th>
               <th className="text-left text-gray-600 text-base">Action</th>
-            </tr>
+            </motion.tr>
           </thead>
           <tbody>
-            {data.map(item => (
-              <tr className="hover:bg-blue-100">
-                <td className="text-base text-gray-600 py-3 text-left">
+            {data.map((item, index) => (
+              <motion.tr
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+               className="hover:bg-blue-100">
+                <td className="text-base text-gray-600 py-4 text-left">
                   {"item.nom"}
                 </td>
-                <td className="text-base text-gray-600 py-3 text-left ">
+                <td className="text-base text-gray-600 py-4 text-left ">
                   {"item.adresse"}
                 </td>
-                <td className="text-base text-gray-600 py-3 text-left ">
+                <td className="text-base text-gray-600 py-4 text-left ">
                   {"item.telephone"}
                 </td>
-                <td className="text-base text-gray-600 py-3 text-left ">
+                <td className="text-base text-gray-600 py-4 text-left ">
                   {"item.email"}
                 </td>
-                <td className="text-base text-gray-600 py-3 text-left ">
+                <td className="text-base text-gray-600 py-4 text-left ">
                   {"item.ville"}
                 </td>
-                <td className="text-base text-gray-600 py-3 text-left ">
-                  
+                <td className="text-base text-gray-600 py-4 text-left ">
                 </td>
-              </tr>
+              </motion.tr>
             ))}
         </tbody>
-        </table>
+        </motion.table>
       </div>
     </section>
   );
